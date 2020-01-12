@@ -1,6 +1,7 @@
 package org.fasttrackit.loan.application;
 
 import org.fasttrackit.loan.application.domain.Loan;
+import org.fasttrackit.loan.application.exception.ResourceNotFoundException;
 import org.fasttrackit.loan.application.service.LoanService;
 import org.fasttrackit.loan.application.transfer.SaveLoanRequest;
 import org.junit.Test;
@@ -28,21 +29,11 @@ public class LoanServiceIntegrationTests {
 	@Test
  public	void testCreateLoan_whenValidRequest_thenLoanIsSaved() {
 
-		SaveLoanRequest request=new SaveLoanRequest();
-		request.setLoanType("Credit Ipotecar pentru investitii imobiliare");
-		request.setLoanPeriod(10);
-		request.setLoanSum(4500000.00);
-		Loan createdLoan = loanService.createLoan(request);
-
-		 assertThat(createdLoan,notNullValue());
-		 assertThat(createdLoan.getId(), notNullValue());
-		 assertThat(createdLoan.getId(), greaterThan(0L));
-		 assertThat(createdLoan.getLoanType(), is(request.getLoanType()));
-		 assertThat(createdLoan.getLoanSum(), notNullValue());
-
-
+		createLoan();
 
 	}
+
+
 
 	@Test(expected=TransactionSystemException.class)
 
@@ -58,4 +49,37 @@ public class LoanServiceIntegrationTests {
 
 }
 
+@Test
+public void testGetLoan_whenExistingLoan_thenReturnLoan(){
+  Loan createdLoan=createLoan();
+  Loan loan= loanService.getLoan(createdLoan.getId());
+
+	assertThat(loan,notNullValue());
+	assertThat(loan.getId(), is(createdLoan.getId()));
+	assertThat(loan.getId(), greaterThan(0L));
+	assertThat(loan.getLoanType(), is(createdLoan.getLoanType()));
+	assertThat(loan.getLoanSum(), notNullValue());
+	}
+
+	@Test(expected= ResourceNotFoundException.class)
+
+	public void testGetLoan_whenNonExistingLoan_thenThrowResourceNotFounException(){
+      loanService.getLoan(99999);
+
+	}
+	private Loan createLoan() {
+		SaveLoanRequest request=new SaveLoanRequest();
+		request.setLoanType("Credit Ipotecar pentru investitii imobiliare");
+		request.setLoanPeriod(10);
+		request.setLoanSum(4500000.00);
+		Loan createdLoan = loanService.createLoan(request);
+
+		assertThat(createdLoan,notNullValue());
+		assertThat(createdLoan.getId(), notNullValue());
+		assertThat(createdLoan.getId(), greaterThan(0L));
+		assertThat(createdLoan.getLoanType(), is(request.getLoanType()));
+		assertThat(createdLoan.getLoanSum(), notNullValue());
+
+		return createdLoan;
+	}
 }

@@ -1,12 +1,15 @@
 package org.fasttrackit.loan.application.service;
 
 import org.fasttrackit.loan.application.domain.Loan;
+import org.fasttrackit.loan.application.exception.ResourceNotFoundException;
 import org.fasttrackit.loan.application.persistance.LoanRepository;
 import org.fasttrackit.loan.application.transfer.SaveLoanRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static org.slf4j.Logger.*;
 
 @Service
 public class LoanService {
@@ -32,6 +35,17 @@ public class LoanService {
     loan.setImageUrl(request.getImageUrl());
 
     return loanRepository.save(loan);
+
+    }
+
+    public Loan getLoan(long id){
+     LOGGER.info("Retrieving loan {}", id);
+
+    //using Optional
+    return loanRepository.findById(id)
+
+            // lambda expression
+            .orElseThrow( ()->new ResourceNotFoundException("Loan"+id+"does not exists"));
 
     }
 }
