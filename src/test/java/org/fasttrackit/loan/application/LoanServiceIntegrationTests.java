@@ -67,6 +67,35 @@ public void testGetLoan_whenExistingLoan_thenReturnLoan(){
       loanService.getLoan(99999);
 
 	}
+
+	@Test
+	public void testUpdateLoan_whenValidRequest_thenReturnUpdatedLoan(){
+
+		Loan createdLoan = createLoan();
+		SaveLoanRequest request=new SaveLoanRequest();
+
+		request.setLoanType(createdLoan.getLoanType()+"updated");
+		request.setLoanSum(createdLoan.getLoanSum()+20);
+		request.setLoanPeriod(createdLoan.getLoanPeriod()+10);
+
+		Loan updatedLoan = loanService.updateLoan(createdLoan.getId(), request);
+		assertThat(updatedLoan, notNullValue());
+		assertThat(updatedLoan.getId(), is(createdLoan.getId()));
+		assertThat(updatedLoan.getLoanType(), is(request.getLoanType()));
+		assertThat(updatedLoan.getLoanSum(), is(request.getLoanSum()));
+		assertThat(updatedLoan.getLoanPeriod(), is(request.getLoanPeriod()));
+
+	}
+ @Test(expected = ResourceNotFoundException.class)
+	public void test_DeleteLoan_whenExistingLoan_thenLoanIsDeleted(){
+
+		Loan loan=createLoan();
+		loanService.deleteLoan(loan.getId());
+		loanService.getLoan(loan.getId());
+
+
+
+	}
 	private Loan createLoan() {
 		SaveLoanRequest request=new SaveLoanRequest();
 		request.setLoanType("Credit Ipotecar pentru investitii imobiliare");

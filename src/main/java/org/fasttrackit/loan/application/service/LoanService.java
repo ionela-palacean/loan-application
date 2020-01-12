@@ -6,6 +6,7 @@ import org.fasttrackit.loan.application.persistance.LoanRepository;
 import org.fasttrackit.loan.application.transfer.SaveLoanRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,24 @@ public class LoanService {
 
             // lambda expression
             .orElseThrow( ()->new ResourceNotFoundException("Loan"+id+"does not exists"));
+
+    }
+
+    public Loan updateLoan(long id,SaveLoanRequest request){
+    LOGGER.info("Updating product {}: {}",id, request);
+
+    Loan loan=getLoan(id);
+        BeanUtils.copyProperties(request, loan);
+        return loanRepository.save(loan);
+
+    }
+
+    public void deleteLoan(long id){
+
+    LOGGER.info("Deleting product {}",id);
+
+    loanRepository.deleteById(id);
+    LOGGER.info("Deleted product {}", id);
 
     }
 }
