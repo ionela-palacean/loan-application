@@ -37,9 +37,7 @@ public class Loan {
         this.loanType = loanType;
     }
 
-    public Double getLoanSum() {
-        return loanSum;
-    }
+    public Double getLoanSum() { return loanSum; }
 
     public void setLoanSum(Double loanSum) {
         this.loanSum = loanSum;
