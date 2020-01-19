@@ -3,14 +3,16 @@ package org.fasttrackit.loan.application.service;
 import org.fasttrackit.loan.application.domain.Loan;
 import org.fasttrackit.loan.application.exception.ResourceNotFoundException;
 import org.fasttrackit.loan.application.persistance.LoanRepository;
+import org.fasttrackit.loan.application.transfer.GetLoansRequest;
 import org.fasttrackit.loan.application.transfer.SaveLoanRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import static org.slf4j.Logger.*;
 
 @Service
 public class LoanService {
@@ -50,6 +52,16 @@ public class LoanService {
 
     }
 
+
+    public Page<Loan> getLoans(GetLoansRequest request, Pageable pageable) {
+
+    if (request != null && request.getPartialLoanType() != null) {
+        return loanRepository.findByLoanTypeIs(request.getPartialLoanType(), pageable);
+    }
+   return loanRepository.findAll(pageable);
+    }
+
+
     public Loan updateLoan(long id,SaveLoanRequest request){
     LOGGER.info("Updating product {}: {}",id, request);
 
@@ -65,6 +77,22 @@ public class LoanService {
 
     loanRepository.deleteById(id);
     LOGGER.info("Deleted product {}", id);
+
+    }
+
+
+    public Double calculateLoanRate(long loanId, double loanPeriod, double loanSum){
+
+        Loan loan = getLoan(loanId);
+        double result=loanSum*loan.getInterest();
+        return result;
+    }
+
+    public Double calculateLoanIntgerest(long loanId, double interest, double loanSum){
+
+        Loan loan = getLoan(loanId);
+        double interestResult=loanSum*interest;
+        return interestResult;
 
     }
 }

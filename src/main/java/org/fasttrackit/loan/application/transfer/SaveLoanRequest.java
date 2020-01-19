@@ -10,6 +10,18 @@ public class SaveLoanRequest {
     private Double loanSum;
     @NotNull
     private Integer loanPeriod;
+
+    public Double getInterest() {
+        return interest;
+    }
+
+    public void setInterest(Double interest) {
+        this.interest = interest;
+    }
+
+    @NotNull
+    private Double interest;
+
     private String imageUrl;
 
     public String getLoanType() {
@@ -50,6 +62,7 @@ public class SaveLoanRequest {
                 "loanType='" + loanType + '\'' +
                 ", loanSum=" + loanSum +
                 ", loanPeriod=" + loanPeriod +
+                ", interest=" + interest +
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }

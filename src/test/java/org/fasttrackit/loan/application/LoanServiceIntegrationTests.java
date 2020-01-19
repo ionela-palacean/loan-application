@@ -4,6 +4,7 @@ import org.fasttrackit.loan.application.domain.Loan;
 import org.fasttrackit.loan.application.exception.ResourceNotFoundException;
 import org.fasttrackit.loan.application.service.LoanService;
 import org.fasttrackit.loan.application.transfer.SaveLoanRequest;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,15 +94,14 @@ public void testGetLoan_whenExistingLoan_thenReturnLoan(){
 		loanService.deleteLoan(loan.getId());
 		loanService.getLoan(loan.getId());
 
-
-
 	}
 	private Loan createLoan() {
 		SaveLoanRequest request=new SaveLoanRequest();
 		request.setLoanType("Credit Ipotecar pentru investitii imobiliare");
 		request.setLoanPeriod(10);
-		request.setLoanSum(4500000.00);
+		request.setLoanSum(450000.00);
 		Loan createdLoan = loanService.createLoan(request);
+
 
 		assertThat(createdLoan,notNullValue());
 		assertThat(createdLoan.getId(), notNullValue());
@@ -110,5 +110,6 @@ public void testGetLoan_whenExistingLoan_thenReturnLoan(){
 		assertThat(createdLoan.getLoanSum(), notNullValue());
 
 		return createdLoan;
+
 	}
 }

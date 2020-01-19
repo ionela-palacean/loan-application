@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 
@@ -19,6 +20,18 @@ public class Loan {
     private Double loanSum;
     @NotNull
     private Integer loanPeriod;
+    @NotNull
+    private Double interest;
+
+
+    public Double getInterest() {
+        return interest;
+    }
+
+    public void setInterest(Double interest) {
+        this.interest = interest;
+    }
+
     private String imageUrl;
 
     public Long getId() {
@@ -67,7 +80,21 @@ public class Loan {
                 ", loanType='" + loanType + '\'' +
                 ", loanSum=" + loanSum +
                 ", loanPeriod=" + loanPeriod +
+                ", interest=" + interest +
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Loan loan = (Loan) o;
+        return Objects.equals(id, loan.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
