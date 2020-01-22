@@ -12,7 +12,6 @@ public class Loan {
 
     @Id
     @GeneratedValue
-
     private Long id;
     @NotNull
     private String loanType;
@@ -22,6 +21,7 @@ public class Loan {
     private Integer loanPeriod;
     @NotNull
     private Double interest;
+
 
 
     public Double getInterest() {

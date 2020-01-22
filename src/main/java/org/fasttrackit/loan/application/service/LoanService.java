@@ -36,7 +36,7 @@ public class LoanService {
     loan.setLoanSum(request.getLoanSum());
     loan.setLoanPeriod(request.getLoanPeriod());
     loan.setImageUrl(request.getImageUrl());
-
+    loan.setInterest(7.5);
     return loanRepository.save(loan);
 
     }
@@ -81,18 +81,16 @@ public class LoanService {
     }
 
 
-    public Double calculateLoanRate(long loanId, double loanPeriod, double loanSum){
+
+    public Double calculateLoanRate(long loanId, double loanPeriod, double loanSum, double interest){
 
         Loan loan = getLoan(loanId);
-        double result=loanSum*loan.getInterest();
-        return result;
-    }
 
-    public Double calculateLoanIntgerest(long loanId, double interest, double loanSum){
+        double interestResult1=(loanSum*interest)/100;
+        double interestResult2=interestResult1/12;
+        double result=loanSum/loanPeriod;
+        double finalResult=result+interestResult2;
 
-        Loan loan = getLoan(loanId);
-        double interestResult=loanSum*interest;
-        return interestResult;
-
+        return finalResult;
     }
 }
