@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PostLoad;
+
 
 @Service
 public class LoanService {
@@ -28,7 +30,6 @@ public class LoanService {
     public LoanService(LoanRepository loanRepository) {
         this.loanRepository = loanRepository;
     }
-
     public Loan createLoan(SaveLoanRequest request){
     LOGGER.info("Creating loan {} ", request);
     Loan loan=new Loan();
@@ -37,9 +38,10 @@ public class LoanService {
     loan.setLoanPeriod(request.getLoanPeriod());
     loan.setImageUrl(request.getImageUrl());
     loan.setInterest(7.5);
-    return loanRepository.save(loan);
 
-    }
+        return loanRepository.save(loan);
+
+}
 
     public Loan getLoan(long id){
      LOGGER.info("Retrieving loan {}", id);
@@ -80,17 +82,16 @@ public class LoanService {
 
     }
 
+@PostLoad
+    public double getCalculateLoanRate (Loan loan, long id, double loanSum, double loanInterest, double loanPeriod) {
 
-
-    public Double calculateLoanRate(long loanId, double loanPeriod, double loanSum, double interest){
-
-        Loan loan = getLoan(loanId);
-
-        double interestResult1=(loanSum*interest)/100;
-        double interestResult2=interestResult1/12;
-        double result=loanSum/loanPeriod;
-        double finalResult=result+interestResult2;
-
+        Loan loan1=getLoan(id);
+        double interestResult1 = (loanSum * loanInterest) / 100;
+        double interestResult2 = interestResult1 / 12;
+        double result = loanSum / loanPeriod;
+        double finalResult = result + interestResult2;
         return finalResult;
+
     }
+
 }

@@ -13,14 +13,16 @@ public class SaveLoanRequest {
 
     public Double getInterest() {
         return interest;
+
     }
 
     public void setInterest(Double interest) {
         this.interest = interest;
     }
 
-    @NotNull
-    private Double interest;
+    //@NotNull
+    private Double interest=1.0;
+
 
     private String imageUrl;
 
